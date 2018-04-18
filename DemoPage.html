@@ -1,0 +1,244 @@
+<!-- @Author TKaxv_7S -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>分页数据保存工具演示</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        a:link {font-size: 19px;color: #0023FF;text-decoration: none;}
+        a:visited {font-size: 19px;color: #0023FF;}
+        body {text-align: center;}
+        table {border-collapse: collapse;color: #FF8D04;text-align: center;margin: 0 auto;font-size: 21px;}
+        td {border: 1px solid #3F9F00;}
+    </style>
+</head>
+<body>
+<H2>分页数据保存工具演示</H2>
+<H3>新增新闻</H3>
+<form>
+    <div id="newsdiv">
+        <p>添加标题</p><input type="text" name="caption"/>
+        <br/>
+        <p>添加内容</p><textarea name="newsdesc" rows="4" cols="40"></textarea>
+        <br/>
+    </div>
+    <H4>选择用户</H4>
+    <table id="newsadd" width="50%">
+        <thead>
+        <tr>
+            <td style="width: 15%">ID</td>
+            <td style="width: 70%">账号</td>
+            <td style="width: 15%">全选<input type="checkbox" id="chkall" style="width: 17px;height: 17px;"></td>
+        </tr>
+        </thead>
+        <tbody id="userlist"></tbody>
+        <tfoot>
+        <tr style="height: 36px">
+            <td id="tftd" colspan="3">
+                <span id="tleft"></span>
+                &nbsp;&nbsp;<span id="tcenter"></span>&nbsp;&nbsp;
+                <span id="tright"></span>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+    <input type="button" onclick="Save()" value="保存"/>
+    &nbsp;&nbsp;<a href='javascript:void(0);' onclick="refresh()">重置</a>
+</form>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/JsonUtil.js"></script>
+<script type="text/javascript" src="js/ArrayUtil.js"></script>
+<script type="text/javascript">
+    var Data = {
+        1: [{
+            "userid": 1,
+            "username": "TKaxv_7S",
+        }, {
+            "userid": 33,
+            "username": "Spring",
+        }, {
+            "userid": 38,
+            "username": "SpringMVC",
+        }, {
+            "userid": 19,
+            "username": "Hibernate",
+        }, {
+            "userid": 36,
+            "username": "Shiro",
+        }, {
+            "userid": 29,
+            "username": "admin",
+        }],
+        2: [{
+            "userid": 25,
+            "username": "aasadsada",
+        }, {
+            "userid": 32,
+            "username": "admin",
+        }, {
+            "userid": 34,
+            "username": "afox",
+        }, {
+            "userid": 21,
+            "username": "涛哥",
+        }, {
+            "userid": 22,
+            "username": "dsasda",
+        }, {
+            "userid": 27,
+            "username": "fdfdfd",
+        }],
+        3: [{
+            "userid": 37,
+            "username": "Hello",
+        }, {
+            "userid": 24,
+            "username": "sefsdfsgd",
+        }, {
+            "userid": 28,
+            "username": "gfjfgdfvdv",
+        }, {
+            "userid": 23,
+            "username": "myself",
+        }, {
+            "userid": 18,
+            "username": "sdfsghhsg",
+        }, {
+            "userid": 17,
+            "username": "sdgjyrgegf",
+        }],
+        4: [{
+            "userid": 30,
+            "username": "vvvvv",
+        }, {
+            "userid": 31,
+            "username": "6sdfsfdgg",
+        }]
+    };
+
+    $(function () {
+        setArgs("#userlist", "tr", "input:checkbox[name=userid]:checked", "input");
+        dopage(1);
+    });
+
+    function dopage(page) {
+        setData(selArgs);
+        //$.ajax({});
+        //SUCCESS:
+        $("#userlist").empty();
+        //记录当前页
+        thisPage = page;
+        //判断是否存在
+        isPage = thisPage in postData;
+        //全选回显
+        var cx = false;
+        var now = isPage&&postData[thisPage]||[];
+        $.each(Data[page],function (i,dom) {
+            //多选回显
+            var x = now[i] != null;
+            (x=now[i] != null)||(cx=!x);
+            var domtr = $("<tr style='height: 36px'></tr>").appendTo($("#userlist"));
+            $("<td></td>").text(dom.userid).appendTo(domtr);
+            var namedom = $("<td></td>").text(dom.username).appendTo(domtr);
+            var domtd = $("<td></td>").appendTo(domtr);
+            $("<input/>").attr({
+                name:"username",
+                value:dom.username,
+                hidden:true
+            }).appendTo(namedom);
+            $("<input/>").attr({
+                type: "checkbox",
+                name: "userid",
+                value: dom.userid,
+                style: "width: 20px;height: 20px",
+            }).prop("checked", x).appendTo(domtd);
+        });
+        $("#tcenter").html("第" + thisPage + "页");
+        if (thisPage==1) {
+            $("#tleft").html($("<span></span>").text("最前一页"));
+        } else {
+            $("#tleft").html("<a href='javascript:void(0);' onclick='dopage(1)'>跳到最前</a>&nbsp;<a href='javascript:void(0);' onclick='dopage(" + (thisPage - 1) + ")'>上一页</a>");
+        }
+        if (thisPage==4) {
+            $("#tright").html($("<span></span>").text("最后一页"));
+        } else {
+            $("#tright").html("<a href='javascript:void(0);' onclick='dopage(" + (thisPage + 1) + ")'>下一页</a>&nbsp;<a href='javascript:void(0);' onclick='dopage(" + 4 + ")'>跳到最后</a>");
+        }
+        cancelAll(cx);
+    };
+
+    function makJson() {
+        setData(selArgs);
+        var dataJson = {};
+        var List = getData();
+        dataJson.users = List;
+        dataJson.news = MarkJsonObj("#newsdiv", "input,textarea");
+        return dataJson;
+    }
+    
+    function ShowJData() {
+        $("#ShowJsonData").empty();
+        for(key in postData){
+            var ShowJStr="<span>第"+key+"页</span><br/>";
+            $(postData[key]).each(function (i, dom) {
+                var x = dom!=null?dom.userid+"-"+dom.username:null;
+                ShowJStr+="<span style='float: left'>第"+(i+1)+"行："+x+"</span><br/>";
+            })
+            $("#ShowJsonData").append($("<div style='float: left;margin-left: 14px;'/>").append(ShowJStr));
+        }
+    }
+
+    function Save() {
+        setData(selArgs);
+        ShowJData();
+        $("#PostJsonData").html(JSON.stringify(makJson()));
+        // console.log(postData);
+        /*$.ajax({
+            url: "${Path}/Admin/newsadd",
+            data: makJson(),
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json",
+            async: true,
+            success: function (data) {
+                if (data.message == "") {
+                    alert("添加成功！");
+                    window.location.href = "${Path}/admin/newslist";
+                } else {
+                    alert(data.message);
+                }
+                refresh();
+            },
+            error: function (data) {
+                alert(data.message);
+            }
+        });*/
+    }
+
+    //全选
+    $("#chkall").click(function () {
+        $("#userlist input[type='checkbox']").prop("checked", $("#chkall").is(":checked"));
+    });
+
+    //是否取消全选
+    function cancelAll(cx) {
+        $("#chkall").prop("checked", !cx);
+    }
+
+    //全部重置
+    function refresh() {
+        $("#chkall").prop("checked", false);
+        $("#userlist input[type='checkbox']").prop("checked", false);
+        //重置
+        Reset();
+        dopage(1);
+        $("#ShowJsonData").empty();
+        $("#PostJsonData").empty();
+    }
+</script>
+<H2>分页数据结构</H2>
+<div id="ShowJsonData" style="font-size: 26px;height:50%;border:4px solid #FF8D04;"></div>
+<H2>提交的数据</H2>
+<div id="PostJsonData" style="font-size: 23px;height:50%;border:4px solid #FF8D04;"></div>
+</body>
+</html>
