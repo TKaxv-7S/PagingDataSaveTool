@@ -36,7 +36,7 @@ function getData() {
     var List = [];
     for (thePage in postData) {
         $(postData[thePage]).each(function (i, dom) {
-            dom != null ? List.push(dom) : null;
+            dom != null && List.push(dom);
         })
     }
     return List;
