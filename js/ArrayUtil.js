@@ -33,6 +33,7 @@ function setData(selArgs) {
 
 //获得JSON对象数组
 function getData() {
+    setData(selArgs);
     var List = [];
     for (thePage in postData) {
         $(postData[thePage]).each(function (i, dom) {
