@@ -43,7 +43,7 @@
         </tr>
         </tfoot>
     </table>
-    <input type="button" onclick="Save()" value="保存"/>
+    <input type="button" onclick="Save()" style="margin-top:12px;height:34px;width:68px;" value="保存"/>
     &nbsp;&nbsp;<a href='javascript:void(0);' onclick="refresh()">重置</a>
 </form>
 <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -72,48 +72,48 @@
         }],
         2: [{
             "userid": 25,
-            "username": "aasadsada",
+            "username": "张三",
         }, {
             "userid": 32,
-            "username": "admin",
+            "username": "李四",
         }, {
             "userid": 34,
-            "username": "afox",
+            "username": "达到",
         }, {
             "userid": 21,
-            "username": "涛哥",
+            "username": "阿倒萨",
         }, {
             "userid": 22,
-            "username": "dsasda",
+            "username": "王武",
         }, {
             "userid": 27,
-            "username": "fdfdfd",
+            "username": "甲",
         }],
         3: [{
             "userid": 37,
-            "username": "Hello",
+            "username": "阿斯蒂芬",
         }, {
             "userid": 24,
-            "username": "sefsdfsgd",
+            "username": "乙",
         }, {
             "userid": 28,
-            "username": "gfjfgdfvdv",
+            "username": "丙",
         }, {
             "userid": 23,
-            "username": "myself",
+            "username": "周树人",
         }, {
             "userid": 18,
-            "username": "sdfsghhsg",
+            "username": "丁",
         }, {
             "userid": 17,
-            "username": "sdgjyrgegf",
+            "username": "孔乙己",
         }],
         4: [{
             "userid": 30,
-            "username": "vvvvv",
+            "username": "陈独秀",
         }, {
             "userid": 31,
-            "username": "6sdfsfdgg",
+            "username": "李大钊",
         }]
     };
 
@@ -181,7 +181,7 @@
         for(key in postData){
             var ShowJStr="<span>第"+key+"页</span><br/>";
             $(postData[key]).each(function (i, dom) {
-                var x = dom!=null?dom.userid+"-"+dom.username:null;
+                var x = dom!=null?dom.userid+" "+dom.username:null;
                 ShowJStr+="<span style='float: left'>第"+(i+1)+"行："+x+"</span><br/>";
             })
             $("#ShowJsonData").append($("<div style='float: left;margin-left: 14px;'/>").append(ShowJStr));
