@@ -118,12 +118,12 @@
     };
 
     $(function () {
-        setArgs("#userlist", "tr", "input:checkbox[name=userid]:checked", "input");
+        setArgs("#chkall","#userlist", "tr", "input:checkbox[name=userid]:checked", "input");
         dopage(1);
     });
 
     function dopage(page) {
-        setData(selArgs);
+        setData();
         //$.ajax({});
         //SUCCESS:
         $("#userlist").empty();
@@ -189,7 +189,7 @@
     }
 
     function Save() {
-        setData(selArgs);
+        setData();
         ShowJData();
         $("#PostJsonData").html(JSON.stringify(makJson()));
         // console.log(postData);
@@ -213,16 +213,6 @@
                 alert(data.message);
             }
         });*/
-    }
-
-    //全选
-    $("#chkall").click(function () {
-        $("#userlist input[type='checkbox']").prop("checked", $("#chkall").is(":checked"));
-    });
-
-    //是否取消全选
-    function cancelAll(cx) {
-        $("#chkall").prop("checked", !cx);
     }
 
     //全部重置
